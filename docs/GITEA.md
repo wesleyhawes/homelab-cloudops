@@ -6,18 +6,40 @@ on `gitea.dataprofusion.com`.
 
 ## Source backup
 
-Gitea pulls the public GitHub repository every hour without a GitHub credential.
-The mirror contains Git branches, tags and their reachable history. Mirror pruning
-is disabled so source-side ref deletion does not immediately remove backup refs.
-It is a source mirror, not a versioned archive of issues, pull requests, release
-attachments, Actions history, local files or secrets. Keep those in the relevant
-server backups. A mirrored ref can still advance; protect the Gitea server's own
-storage with independent backup retention.
+The `homelab-cloudops-gitea-backup.timer` user timer on Rocinante fetches public
+GitHub branches/tags hourly, then pushes them to a normal private Gitea repository.
+This uses the same approach as the existing portfolio backups. Gitea's native
+pull-mirror queue did not process manual requests during setup, so the backup
+does not depend on that queue or change the running Gitea service.
 
-Make changes through GitHub PRs. Do not push independently to the Gitea mirror.
-Use the repository's **Settings → Mirror Settings → Synchronize Now** to request
-an immediate pull after a merge; otherwise allow the hourly interval and queue.
-Compare the latest commit on both `main` branches when checking replication.
+The [backup script](../integrations/gitea/backup.py) retains source-deleted refs
+and archives both incoming and previous ref tips under `cloudops-backup/` tags
+before updating changed refs with atomic, lease-protected pushes. Unknown
+destination-only edits stop synchronization instead of being overwritten.
+Every run verifies destination refs and writes a status report. The timer invokes
+a separately installed copy of the script; source changes do not automatically
+replace the installed backup program.
+
+The backup contains Git branches, tags and their reachable history. It excludes
+issues, PR metadata, release attachments, Actions history, local files and secrets.
+Keep those in the relevant server backups, and protect Gitea's own storage with
+independent retention.
+
+Make changes through GitHub PRs. Do not independently edit the Gitea backup's
+source branches. As the `codex` user on Rocinante:
+
+```bash
+systemctl --user start homelab-cloudops-gitea-backup.service
+systemctl --user list-timers homelab-cloudops-gitea-backup.timer
+journalctl --user -u homelab-cloudops-gitea-backup.service -n 20
+cat ~/.local/state/homelab-cloudops-backup/latest.json
+```
+
+The configuration is in `~/.config/homelab-cloudops-backup/config.json`; the
+installed script is in `~/.local/lib/homelab-cloudops-backup/backup.py`. GitHub
+fetches need no credential; Gitea pushes use the existing machine SSH key and
+strict host-key verification. Compare both `main` commit IDs when checking
+replication. The service/timer templates are in `integrations/gitea/`.
 
 A user with access can recover the source with:
 
@@ -43,7 +65,9 @@ browser smoke tests and wheel checks as GitHub. Gitea-specific differences:
 - The full committed source, including the installer, web UI and playbooks, is
   packaged with a SHA-256 checksum. Wheels alone do not include the appliance assets.
 - Successful runs upload packages and reports to a Gitea artifact with seven-day
-  retention, using the artifact v3 protocol supported by Gitea 1.25.
+  retention, using the artifact v3 protocol supported by the current server and
+  runner. The job downloads the artifact again and verifies the source checksum
+  and installer/runtime assets before reporting success.
 
 The server currently runs Gitea 1.25.3. Its `permissions`, `concurrency` and job
 timeout behavior differs from GitHub; do not treat copied YAML as a privilege or
@@ -71,6 +95,5 @@ pushes and branch deletion are disabled, including for administrators. Squash or
 rebase merge after CI passes. The approval count is zero while the project has
 one maintainer; a second person's approval is not required to merge your own PR.
 
-References: [Gitea mirroring](https://docs.gitea.com/usage/repository/repo-mirror/),
-[Gitea 1.25 Actions differences](https://docs.gitea.com/1.25/usage/actions/comparison/),
+References: [Gitea 1.25 Actions differences](https://docs.gitea.com/1.25/usage/actions/comparison/),
 [GitHub protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).

@@ -87,7 +87,7 @@ jobs:
       - name: Package the complete installable source
         run: bash tools/package-source.sh
 
-      # Gitea 1.25 uses the artifact v3 protocol, not GitHub's v4 backend.
+      # Use the legacy protocol supported by this server/runner combination.
       - name: Deliver validated packages and reports
         uses: https://github.com/actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3
         with:
@@ -98,3 +98,27 @@ jobs:
             local/ci/browser-checks.json
           if-no-files-found: error
           retention-days: 7
+
+      - name: Download the delivered artifact again
+        uses: https://github.com/actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+        with:
+          name: homelab-cloudops-${{ github.sha }}
+          path: local/ci/downloaded
+
+      - name: Verify the downloaded source package
+        run: |
+          cd local/ci/downloaded/dist
+          sha256sum --check homelab-cloudops-source-*.tar.gz.sha256
+          python - <<'PY'
+          from pathlib import Path
+          import tarfile
+
+          archive = next(Path('.').glob('homelab-cloudops-source-*.tar.gz'))
+          with tarfile.open(archive) as source:
+              names = set(source.getnames())
+          required = {'homelab-cloudops/' + name for name in (
+              'install.sh', 'web/app.js', 'pyproject.toml', 'PRIORITIES.md',
+              'ansible/playbooks/operation.yml', 'semaphore/bridge.py')}
+          assert required <= names, required - names
+          print('Downloaded source package contains the installer and runtime assets.')
+          PY

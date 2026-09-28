@@ -1,7 +1,8 @@
 # Optional Git-platform integration — deliberately secondary
 
-GitHub Actions now validates contributions to this repository; see
-[`docs/CI.md`](../docs/CI.md). The distribution can still be downloaded/extracted,
+GitHub Actions validates contributions and Gitea Actions validates and packages
+the private source backup; see [`docs/CI.md`](../docs/CI.md) and
+[`docs/GITEA.md`](../docs/GITEA.md). The distribution can still be downloaded/extracted,
 installed, operated and recovered without a Git account or server. Git-hosted
 project development and end-user operation are separate concerns.
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly Homelab CloudOps source backup to Gitea
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=5min
+Unit=homelab-cloudops-gitea-backup.service
+
+[Install]
+WantedBy=timers.target

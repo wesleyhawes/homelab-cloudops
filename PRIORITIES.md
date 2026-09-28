@@ -13,7 +13,8 @@ in [ACCEPTANCE.md](docs/ACCEPTANCE.md) and [ROADMAP.md](docs/ROADMAP.md).
 - [x] F-02: Run Python, Ansible, Compose, browser and package checks in GitHub Actions.
 - [x] F-03: Protect GitHub `main`: PRs, current passing CI, resolved conversations,
   linear history, and no force pushes/deletion; include administrators.
-- [x] F-04: Create an hourly private GitHub-to-Gitea source mirror. See
+- [x] F-04: Create an hourly private GitHub-to-Gitea source backup with retained
+  historical ref tips. See
   [backup operations](docs/GITEA.md).
 - [ ] F-05: Verify Gitea CI and download/check the delivered source artifact.
 - [ ] F-06: Rehearse recovering a clean checkout from Gitea, and document separate
