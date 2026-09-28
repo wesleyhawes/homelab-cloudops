@@ -8,6 +8,10 @@ A standalone, Docker Compose-based personal-cloud manager with local Ansible pla
 
 **Do not place irreplaceable files in this pilot until the real-host acceptance tests in `docs/ACCEPTANCE.md` pass on your equipment.** This package was not deployed to a real homelab during development. Local automated tests are evidence about the code, not proof that Docker, Semaphore, AIO or disaster recovery work end to end on your server. See `validation/` for the exact results and limitations.
 
+![Homelab CloudOps desktop dashboard showing simulated cloud status, backup controls, and activity history](validation/screenshots/desktop-preview.png)
+
+*Desktop preview with simulated data.*
+
 ## Start here
 
 Download the source with GitHub's **Code → Download ZIP**, or clone it:
