@@ -1,5 +1,8 @@
 # GitHub Actions
 
+For the private source mirror and its analogous delivery workflow, see
+[Gitea backup and CI/CD](GITEA.md). The working backlog is [PRIORITIES.md](../PRIORITIES.md).
+
 The [CI workflow](../.github/workflows/ci.yml) runs on pull requests, pushes to
 `main`, and manual dispatch. It uses one standard `ubuntu-24.04` GitHub-hosted
 runner, Python 3.12 (the reference Ubuntu platform's Python version), and a

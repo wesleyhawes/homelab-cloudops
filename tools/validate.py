@@ -12,7 +12,7 @@ def command(name,argv):
     print(proc.stdout);record(name,'passed' if proc.returncode==0 else 'failed',proc.stdout[-4000:]);return proc.returncode==0
 record('Python compilation','passed' if all(compileall.compile_dir(ROOT/name,quiet=1) for name in ('src','semaphore','tools','tests')) else 'failed')
 try:
-    files=[f for folder in ('ansible','semaphore','examples','.github')
+    files=[f for folder in ('ansible','semaphore','examples','.github','.gitea')
            for f in (ROOT/folder).rglob('*') if f.suffix in {'.yml','.yaml'}]
     for f in files:yaml.safe_load(f.read_text())
     record('YAML parsing','passed',f'{len(files)} files')

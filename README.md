@@ -126,6 +126,11 @@ validation, browser smoke tests and a Python package build on pushes to `main`
 and pull requests. See [CI details](docs/CI.md) for cost, scope and local commands,
 and [CONTRIBUTING.md](CONTRIBUTING.md) for the path toward an appliance release.
 
+Track the implementation work in [PRIORITIES.md](PRIORITIES.md). An hourly private
+Gitea backup runs equivalent checks and delivers complete source packages;
+see [Gitea backup and CI/CD](docs/GITEA.md). GitHub `main` requires a pull request
+and passing CI.
+
 Dependency resolution currently uses PyPI and upstream container registries. Image tags are selected deliberately and resolved image IDs/digests are recorded at install time; this is **not yet a hermetic, hash-locked or signed release**. AIO's `latest` master image is its upstream-managed channel, not a promise that every child image is frozen. Do not introduce a competing container updater.
 
 Original project code is provided under the MIT license. Upstream products retain their own licenses and trademarks; their images are downloaded separately, not redistributed in this archive. See `NOTICE.md` and `docs/SOURCES.md`.
