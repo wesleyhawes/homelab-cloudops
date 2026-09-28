@@ -42,7 +42,7 @@ def test_no_fake_compose_for_future_provider(name,config):
 
 def test_all_packaged_yaml_is_parseable():
     root=Path(__file__).parents[1]
-    for folder in ('ansible','semaphore','examples','.github'):
+    for folder in ('ansible','semaphore','examples','.github','.gitea'):
         for file in (root/folder).rglob('*'):
             if file.suffix in {'.yml','.yaml'}:
                 assert yaml.safe_load(file.read_text()) is not None,file

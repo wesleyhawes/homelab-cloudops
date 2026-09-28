@@ -3,10 +3,12 @@
 Homelab CloudOps aims to make a dedicated personal-cloud server manageable like
 an appliance. The current Nextcloud AIO implementation is an engineering pilot.
 
-Start with the [architecture](docs/ARCHITECTURE.md),
+Pick work from [PRIORITIES.md](PRIORITIES.md), then read the [architecture](docs/ARCHITECTURE.md),
 [roadmap](docs/ROADMAP.md) and [development checks](docs/CI.md). Open a pull
 request against `main` with a concrete description of the behavior changed and
-the checks you ran. Add regression coverage when changing operation admission,
+the checks you ran. `main` is protected: use a branch, wait for **Validate pilot**,
+resolve review conversations, and squash or rebase merge. Update the priorities
+tracker when completing an item. Add regression coverage when changing operation admission,
 storage checks, backup evidence, recovery verification or authentication boundaries.
 
 The first milestone is qualification of the existing Nextcloud path on a clean

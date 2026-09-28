@@ -1,0 +1,9 @@
+[Unit]
+Description=Back up Homelab CloudOps from GitHub to Gitea
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.local/lib/homelab-cloudops-backup/backup.py --config %h/.config/homelab-cloudops-backup/config.json
+UMask=0077
+NoNewPrivileges=true
+TimeoutStartSec=15min
