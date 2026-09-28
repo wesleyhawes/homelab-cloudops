@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=75,<83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "homelab-cloudops"
+version = "0.1.0a1"
+description = "Standalone, browser-operated homelab cloud lifecycle automation"
+requires-python = ">=3.12"
+dependencies = ["PyYAML>=6.0.2,<7"]
+
+[project.optional-dependencies]
+automation = ["ansible-core==2.21.4"]
+test = ["pytest>=8,<10", "jsonschema>=4,<5"]
+browser-test = ["playwright>=1.50,<2"]
+
+[project.scripts]
+cloudctl = "cloudops.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra"

@@ -1,0 +1,30 @@
+{
+  "name": "nextcloud-aio",
+  "services": {
+    "nextcloud-aio-mastercontainer": {
+      "container_name": "nextcloud-aio-mastercontainer",
+      "environment": {
+        "APACHE_IP_BINDING": "127.0.0.1",
+        "APACHE_PORT": "11000",
+        "NEXTCLOUD_DATADIR": "/srv/cloud-data/nextcloud",
+        "SKIP_DOMAIN_VALIDATION": "false"
+      },
+      "image": "ghcr.io/nextcloud-releases/all-in-one:latest",
+      "init": true,
+      "network_mode": "bridge",
+      "ports": [
+        "192.168.10.50:8080:8080"
+      ],
+      "restart": "always",
+      "volumes": [
+        "nextcloud_aio_mastercontainer:/mnt/docker-aio-config",
+        "/var/run/docker.sock:/var/run/docker.sock:ro"
+      ]
+    }
+  },
+  "volumes": {
+    "nextcloud_aio_mastercontainer": {
+      "name": "nextcloud_aio_mastercontainer"
+    }
+  }
+}

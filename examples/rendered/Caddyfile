@@ -1,0 +1,43 @@
+{
+    admin off
+    auto_https disable_redirects
+}
+(cloudops_routes) {
+    @cross_origin {
+        path /api/*
+        method POST PUT PATCH DELETE
+        header Sec-Fetch-Site cross-site
+    }
+    respond @cross_origin "Cross-origin operations are not allowed" 403
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy no-referrer
+        X-Frame-Options DENY
+        Cache-Control no-store
+    }
+    redir /cloudops /cloudops/ 308
+    # Mount the containing directory so atomic portal updates are visible.
+    handle /cloudops/config.json {
+        root * /srv/cloudops-config
+        rewrite * /portal.json
+        file_server
+    }
+    handle_path /cloudops/* {
+        root * /srv/cloudops
+        header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'"
+        file_server
+    }
+    handle {
+        reverse_proxy 127.0.0.1:3000
+    }
+}
+https://192.168.10.50:9443 {
+    bind 192.168.10.50
+    tls internal
+    import cloudops_routes
+}
+# This loopback-only listener is for an existing trusted HTTPS proxy or Tailscale Serve.
+http://:9080 {
+    bind 127.0.0.1
+    import cloudops_routes
+}

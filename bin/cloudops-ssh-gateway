@@ -1,0 +1,12 @@
+#!/usr/bin/python3 -I
+"""Only this forced command is reachable with the manager's SSH key."""
+import os
+import subprocess
+import sys
+ALLOWED = {"check", "deploy", "backup", "backup_check", "verify", "recovery_info", "verify_recovery"}
+command = os.environ.get("SSH_ORIGINAL_COMMAND", "")
+if command not in ALLOWED:
+    print("Only fixed CloudOps operations are allowed; shells, arguments and file transfer are disabled.", file=sys.stderr)
+    raise SystemExit(64)
+# sudoers authorizes this exact executable+argument set, not arbitrary Ansible or Docker.
+raise SystemExit(subprocess.call(["/usr/bin/sudo", "-n", "/opt/cloudops/current/bin/cloudops-host", command], env={"PATH":"/usr/bin:/bin"}))

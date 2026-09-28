@@ -1,0 +1,4 @@
+---
+- name: Refuse an unimplemented owncloud_server provider
+  ansible.builtin.fail:
+    msg: "owncloud_server is a planned adapter, not a supported deployment. See docs/PROVIDER_CONTRACT.md."

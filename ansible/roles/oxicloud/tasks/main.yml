@@ -1,0 +1,4 @@
+---
+- name: Refuse an unimplemented oxicloud provider
+  ansible.builtin.fail:
+    msg: "oxicloud is a planned adapter, not a supported deployment. See docs/PROVIDER_CONTRACT.md."

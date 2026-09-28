@@ -1,0 +1,16 @@
+---
+- name: Run a validated CloudOps provider operation
+  hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Validate the fixed role and operation selection
+      ansible.builtin.assert:
+        that:
+          - cloudops_role == 'nextcloud_aio'
+          - cloudops_operation in ['check', 'deploy', 'backup', 'backup_check', 'verify', 'recovery_info', 'verify_recovery']
+        fail_msg: This provider or operation is not implemented in the pilot.
+    - name: Run the provider-owned operation
+      ansible.builtin.include_role:
+        name: "{{ cloudops_role }}"
+        tasks_from: "{{ cloudops_operation }}"

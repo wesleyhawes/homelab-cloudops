@@ -1,0 +1,10 @@
+---
+- name: Execute Nextcloud AIO backup check with checked evidence
+  ansible.builtin.command:
+    argv:
+      - /opt/cloudops/venv/bin/python
+      - -I
+      - -m
+      - cloudops.action
+      - backup_check
+  changed_when: true

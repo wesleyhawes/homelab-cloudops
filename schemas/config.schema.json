@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CloudOps configuration v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "instance_id": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "nextcloud_aio",
+        "owncloud_ocis",
+        "owncloud_server",
+        "oxicloud"
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "primary",
+        "recovery-test"
+      ]
+    },
+    "management_ip": {
+      "type": "string"
+    },
+    "management_port": {
+      "type": "integer"
+    },
+    "aio_admin_port": {
+      "type": "integer"
+    },
+    "cloud_url": {
+      "type": "string"
+    },
+    "data_mount": {
+      "type": "string"
+    },
+    "data_path": {
+      "type": "string"
+    },
+    "backup_mount": {
+      "type": "string"
+    },
+    "backup_path": {
+      "type": "string"
+    },
+    "data_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "fstype": {
+          "type": "string"
+        }
+      }
+    },
+    "backup_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "fstype": {
+          "type": "string"
+        }
+      }
+    },
+    "minimum_free_gib": {
+      "type": "integer"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "job_timeout_seconds": {
+      "type": "integer"
+    },
+    "semaphore_image": {
+      "type": "string"
+    },
+    "caddy_image": {
+      "type": "string"
+    },
+    "aio_image": {
+      "type": "string"
+    },
+    "proxy_mode": {
+      "type": "string"
+    }
+  },
+  "description": "Structural validation only. cloudctl validates semantic constraints; install enrolls actual mount identities."
+}

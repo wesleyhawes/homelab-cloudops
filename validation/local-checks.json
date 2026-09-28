@@ -1,0 +1,41 @@
+{
+  "release": "0.1.0a1",
+  "checks": [
+    {
+      "check": "Python compilation",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "check": "YAML parsing",
+      "status": "passed",
+      "detail": "20 files"
+    },
+    {
+      "check": "Bash syntax",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "check": "Browser JavaScript syntax",
+      "status": "passed",
+      "detail": ""
+    },
+    {
+      "check": "Unit and contract tests",
+      "status": "passed",
+      "detail": "........................................................................ [ 48%]\n........................................................................ [ 97%]\n...                                                                      [100%]\n147 passed in 9.10s\n"
+    },
+    {
+      "check": "Real Docker / Semaphore / Ansible integration",
+      "status": "not_run",
+      "detail": "Must run the documented acceptance tests on a dedicated Ubuntu 24.04 systemd VM. Unit and browser tests are not substitutes."
+    },
+    {
+      "check": "Live Nextcloud deployment, backup and separate-host restoration",
+      "status": "not_run",
+      "detail": "No homelab was accessed or deployed by the development checks."
+    }
+  ],
+  "success": true
+}

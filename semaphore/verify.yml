@@ -1,0 +1,9 @@
+---
+- name: Personal cloud — verify
+  hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Run on the target server and stream progress
+      cloudops_stream:
+        operation: verify

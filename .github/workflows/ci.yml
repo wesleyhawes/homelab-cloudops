@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate pilot
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CLOUDOPS_VALIDATION_DIR: local/ci
+      # Use Playwright's installed Chromium, even if a system browser exists.
+      CHROMIUM_PATH: /nonexistent/cloudops-chromium
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install development dependencies
+        run: python -m pip install -e '.[test,automation,browser-test]' build==1.6.1
+
+      - name: Validate source and run unit tests
+        run: |
+          node --check web/app.js
+          sh -n bin/cloudops-host
+          python tools/validate.py --report local/ci/local-checks.json
+
+      - name: Check Ansible syntax without running operations
+        run: bash tools/check-ansible.sh
+
+      - name: Validate example Compose configurations
+        run: |
+          docker compose -f examples/rendered/manager.compose.yaml config --quiet
+          docker compose -f examples/rendered/nextcloud.compose.yaml config --quiet
+
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Test browser flows against the local simulated API
+        run: python tools/browser_smoke.py
+
+      - name: Build and smoke-test the Python wheel
+        run: |
+          python -m build --outdir local/ci/dist
+          python -m venv "$RUNNER_TEMP/cloudops-wheel"
+          "$RUNNER_TEMP/cloudops-wheel/bin/python" -m pip install local/ci/dist/*.whl
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/cloudops-wheel/bin/cloudctl" --help
+          "$RUNNER_TEMP/cloudops-wheel/bin/cloudctl" providers
+
+      - name: Summarize completed checks
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## Homelab CloudOps development checks\n\n')
+              for name in ('local-checks.json', 'browser-checks.json'):
+                  path = Path('local/ci') / name
+                  if not path.exists():
+                      summary.write(f'- {name}: no completed report; inspect the step logs.\n')
+                      continue
+                  for check in json.loads(path.read_text())['checks']:
+                      summary.write(f"- {check['check']}: **{check['status']}**\n")
+              summary.write('\nBrowser checks use a simulated API. Real installation, '
+                            'authentication, backup and separate-host restore still require '
+                            'the dedicated-VM acceptance checklist.\n')
+          PY

@@ -1,0 +1,41 @@
+{
+  "release": "0.1.0a1",
+  "qualification": "unit-and-mock-tests-only; real-host acceptance pending",
+  "host": {
+    "os": "Ubuntu Server 24.04",
+    "architecture": "x86_64",
+    "systemd": true,
+    "dedicated": true,
+    "data_filesystems": [
+      "ext4",
+      "xfs"
+    ],
+    "backup": "different mounted filesystem"
+  },
+  "requested_versions": {
+    "ansible-core": "2.21.4",
+    "semaphore": "v2.19.12",
+    "caddy": "2.11.4",
+    "aio_master": "upstream-managed latest channel"
+  },
+  "aio_evidence_review_basis": "v14.1.1",
+  "runtime_image_digest_capture": true,
+  "full_dependency_lock": false,
+  "signed_distribution": false,
+  "providers": {
+    "nextcloud_aio": "implemented-pilot-not-live-qualified",
+    "owncloud_ocis": "planned-disabled",
+    "owncloud_server": "planned-disabled",
+    "oxicloud": "planned-disabled"
+  },
+  "unsupported": [
+    "Fedora until qualified",
+    "ARM64 until qualified",
+    "Podman",
+    "Kubernetes",
+    "existing AIO adoption",
+    "remote Borg endpoints",
+    "automated upgrades",
+    "unattended destructive restore"
+  ]
+}

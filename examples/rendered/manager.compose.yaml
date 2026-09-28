@@ -1,0 +1,89 @@
+{
+  "name": "cloudops-manager",
+  "secrets": {
+    "access_key": {
+      "file": "/etc/cloudops/secrets/access_key"
+    },
+    "admin_password": {
+      "file": "/etc/cloudops/secrets/admin_password"
+    },
+    "bridge_key": {
+      "file": "/etc/cloudops/secrets/bridge_key"
+    }
+  },
+  "services": {
+    "gateway": {
+      "image": "caddy:2.11.4",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "3",
+          "max-size": "10m"
+        }
+      },
+      "network_mode": "host",
+      "restart": "unless-stopped",
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "volumes": [
+        "/etc/cloudops/Caddyfile:/etc/caddy/Caddyfile:ro",
+        "caddy_data:/data",
+        "caddy_config:/config",
+        "/opt/cloudops/current/web:/srv/cloudops:ro",
+        "/etc/cloudops/public:/srv/cloudops-config:ro"
+      ]
+    },
+    "semaphore": {
+      "environment": {
+        "ANSIBLE_CONFIG": "/opt/cloudops-playbooks/ansible.cfg",
+        "ANSIBLE_HOST_KEY_CHECKING": "True",
+        "SEMAPHORE_ACCESS_KEY_ENCRYPTION_FILE": "/run/secrets/access_key",
+        "SEMAPHORE_ADMIN": "admin",
+        "SEMAPHORE_ADMIN_EMAIL": "owner@localhost",
+        "SEMAPHORE_ADMIN_NAME": "CloudOps Owner",
+        "SEMAPHORE_ADMIN_PASSWORD_FILE": "/run/secrets/admin_password",
+        "SEMAPHORE_DB": "/var/lib/semaphore/cloudops.sqlite",
+        "SEMAPHORE_DB_DIALECT": "sqlite",
+        "SEMAPHORE_PLAYBOOK_PATH": "/tmp/semaphore",
+        "SEMAPHORE_WEB_HOST": "https://192.168.10.50:9443",
+        "TZ": "America/Denver"
+      },
+      "extra_hosts": [
+        "cloudops-host:host-gateway"
+      ],
+      "image": "semaphoreui/semaphore:v2.19.12",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "3",
+          "max-size": "10m"
+        }
+      },
+      "ports": [
+        "127.0.0.1:3000:3000"
+      ],
+      "restart": "unless-stopped",
+      "secrets": [
+        "admin_password",
+        "access_key",
+        "bridge_key"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "volumes": [
+        "semaphore_data:/var/lib/semaphore",
+        "semaphore_config:/etc/semaphore",
+        "/opt/cloudops/current/semaphore:/opt/cloudops-playbooks:ro",
+        "/etc/cloudops/known_hosts:/opt/cloudops-known-hosts:ro"
+      ]
+    }
+  },
+  "volumes": {
+    "caddy_config": {},
+    "caddy_data": {},
+    "semaphore_config": {},
+    "semaphore_data": {}
+  }
+}

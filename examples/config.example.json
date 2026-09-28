@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "instance_id": "personal-cloud",
+  "provider": "nextcloud_aio",
+  "mode": "primary",
+  "management_ip": "192.168.10.50",
+  "management_port": 9443,
+  "aio_admin_port": 8080,
+  "cloud_url": "https://cloud.example.com",
+  "data_mount": "/srv/cloud-data",
+  "data_path": "/srv/cloud-data/nextcloud",
+  "backup_mount": "/srv/cloud-backup",
+  "backup_path": "/srv/cloud-backup/aio",
+  "data_identity": {},
+  "backup_identity": {},
+  "minimum_free_gib": 10,
+  "timezone": "America/Denver",
+  "job_timeout_seconds": 21600,
+  "semaphore_image": "semaphoreui/semaphore:v2.19.12",
+  "caddy_image": "caddy:2.11.4",
+  "aio_image": "ghcr.io/nextcloud-releases/all-in-one:latest",
+  "proxy_mode": "existing_host_proxy"
+}

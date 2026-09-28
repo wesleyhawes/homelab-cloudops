@@ -1,0 +1,13 @@
+---
+- name: Personal cloud — deploy
+  hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Require an explicit maintenance approval
+      ansible.builtin.assert:
+        that: (cloudops_confirmation | default('')) == 'PROCEED'
+        fail_msg: Approve the operation in the form before continuing.
+    - name: Run on the target server and stream progress
+      cloudops_stream:
+        operation: deploy

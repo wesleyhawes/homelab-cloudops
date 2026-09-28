@@ -1,0 +1,10 @@
+---
+- name: Execute Nextcloud AIO verify with checked evidence
+  ansible.builtin.command:
+    argv:
+      - /opt/cloudops/venv/bin/python
+      - -I
+      - -m
+      - cloudops.action
+      - verify
+  changed_when: false

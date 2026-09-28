@@ -1,0 +1,26 @@
+---
+- name: Validate mount identity, ownership and initial deployment intent
+  ansible.builtin.command:
+    argv: [/opt/cloudops/venv/bin/python, -I, -m, cloudops.action, prepare_deploy]
+  changed_when: false
+
+- name: Start the AIO master without recreating existing AIO-managed state
+  ansible.builtin.command:
+    argv:
+      - docker
+      - compose
+      - --file
+      - /etc/cloudops/nextcloud.compose.yaml
+      - up
+      - --detach
+      - --no-recreate
+      - --wait
+      - --wait-timeout
+      - '180'
+  register: cloudops_compose
+  changed_when: "'Creating' in cloudops_compose.stderr or 'Created' in cloudops_compose.stderr or 'Starting' in cloudops_compose.stderr or 'Started' in cloudops_compose.stderr"
+
+- name: Record master readiness and native onboarding handoff
+  ansible.builtin.command:
+    argv: [/opt/cloudops/venv/bin/python, -I, -m, cloudops.action, finish_deploy]
+  changed_when: false

@@ -1,0 +1,49 @@
+{
+  "scope": "Chromium rendering and UI actions with an in-memory mocked API/storage. No browser network policies were changed. This does not validate live HTTP, native authentication/cookies, real localStorage persistence, reload reconnection, SSH, Ansible, Docker or systemd execution.",
+  "checks": [
+    {
+      "check": "Signed-out state disables operation buttons",
+      "status": "passed"
+    },
+    {
+      "check": "Status cards and simulation disclosure render from supplied API fixtures",
+      "status": "passed"
+    },
+    {
+      "check": "1440px desktop layout has no horizontal overflow",
+      "status": "passed"
+    },
+    {
+      "check": "Unchecked approval and cancellation do not submit",
+      "status": "passed"
+    },
+    {
+      "check": "One approved action generates one task request with the required confirmation",
+      "status": "passed"
+    },
+    {
+      "check": "Selected task ID is saved through the browser storage interface (mocked storage)",
+      "status": "passed"
+    },
+    {
+      "check": "Execution output is text, not interpreted HTML",
+      "status": "passed"
+    },
+    {
+      "check": "390px mobile layout has no horizontal overflow",
+      "status": "passed"
+    },
+    {
+      "check": "Mobile guide renders without horizontal overflow",
+      "status": "passed"
+    },
+    {
+      "check": "No unhandled JavaScript errors during the observed action/output flows",
+      "status": "passed"
+    }
+  ],
+  "not_run": [
+    "Network-backed browser_smoke.py was blocked by the environment browser URL policy; run it on the development laptop/test VM.",
+    "Real phone browser tests and live native Semaphore integration."
+  ]
+}
