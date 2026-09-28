@@ -16,9 +16,12 @@ in [ACCEPTANCE.md](docs/ACCEPTANCE.md) and [ROADMAP.md](docs/ROADMAP.md).
 - [x] F-04: Create an hourly private GitHub-to-Gitea source backup with retained
   historical ref tips. See
   [backup operations](docs/GITEA.md).
-- [ ] F-05: Verify Gitea CI and download/check the delivered source artifact.
-- [ ] F-06: Rehearse recovering a clean checkout from Gitea, and document separate
-  backup/retention for issues, release assets and the Gitea server itself.
+- [x] F-05: Verify Gitea CI and download/check the delivered source artifact
+  ([verified run](https://gitea.dataprofusion.com/machine-rocinante-codex/github-wesleyhawes--homelab-cloudops/actions/runs/3)).
+- [x] F-06: Recover a fresh source checkout from Gitea and run `git fsck --full`;
+  verified on 2026-09-28 with installer/runtime files present.
+- [ ] F-07: Verify separate backup/retention and recovery of issues, release
+  assets and the Gitea server itself.
 
 ## P0 — Qualify the existing Nextcloud path
 

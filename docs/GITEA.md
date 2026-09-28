@@ -87,6 +87,12 @@ tar -xzf homelab-cloudops-source-<commit>.tar.gz
 Follow `START_HERE.md` from the extracted tree. Artifacts are temporary delivery
 outputs; the repository mirror is the persistent source backup.
 
+The [verification run](https://gitea.dataprofusion.com/machine-rocinante-codex/github-wesleyhawes--homelab-cloudops/actions/runs/3)
+passed 150 unit/contract tests, 10 browser checks, Ansible/Compose checks, package
+builds, and artifact upload/download/checksum validation on 2026-09-28. A separate
+clone from the Gitea backup passed `git fsck --full` and a fresh checkout contained
+the installer and runtime assets. These checks do not qualify live cloud recovery.
+
 ## GitHub main protection
 
 `main` requires a PR, the **Validate pilot** check from GitHub Actions, a branch
