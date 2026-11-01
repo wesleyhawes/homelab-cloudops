@@ -10,7 +10,7 @@ requires-python = ">=3.12"
 dependencies = ["PyYAML>=6.0.2,<7"]
 
 [project.optional-dependencies]
-automation = ["ansible-core==2.21.4"]
+automation = ["ansible-core==2.21.5"]
 test = ["pytest>=8,<10", "jsonschema>=4,<5"]
 browser-test = ["playwright>=1.50,<2"]
 
